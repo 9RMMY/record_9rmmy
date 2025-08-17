@@ -29,7 +29,12 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 16,
   },
-  logo: { fontSize: 20, fontWeight: '700', color: '#000', letterSpacing: -0.41 },
+  logo: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#000',
+    letterSpacing: -0.41,
+  },
   dropdownButton: {
     backgroundColor: '#FFF',
     paddingHorizontal: 12,
@@ -64,8 +69,20 @@ const styles = StyleSheet.create({
     width: 110,
     height: 36,
   },
-  dropdownText: { fontSize: 12, fontWeight: '400', color: '#000', flex: 1, textAlign: 'center' },
-  dropdownIcon: { width: 16, height: 16, justifyContent: 'center', alignItems: 'center', marginLeft: 'auto' },
+  dropdownText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#000',
+    flex: 1,
+    textAlign: 'center',
+  },
+  dropdownIcon: {
+    width: 16,
+    height: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 'auto',
+  },
   dropdownArrowText: { fontSize: 10, color: '#8E8E93', fontWeight: '600' },
   dropdownOverlay: { flex: 1, backgroundColor: 'transparent' },
   dropdownModal: {
@@ -91,16 +108,51 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 36,
   },
-  dropdownItemText: { fontSize: 12, fontWeight: '400', color: '#000', flex: 1, textAlign: 'center' },
+  dropdownItemText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#000',
+    flex: 1,
+    textAlign: 'center',
+  },
   selectedDropdownItem: { backgroundColor: '#F2F2F7' },
-  selectedDropdownItemText: { fontSize: 12, fontWeight: '500', color: '#007AFF', flex: 1, textAlign: 'center' },
+  selectedDropdownItemText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#007AFF',
+    flex: 1,
+    textAlign: 'center',
+  },
 
-  titleSection: { alignItems: 'flex-start', marginTop: 28, marginBottom: 16, marginHorizontal: 28, paddingHorizontal: 16 },
-  mainTitle: { fontSize: 28, fontWeight: '600', color: '#000', marginBottom: 8, letterSpacing: -0.34, textAlign: 'left' },
-  subtitle: { fontSize: 12, fontWeight: '400', color: '#8E8E93', textAlign: 'left' },
+  titleSection: {
+    alignItems: 'flex-start',
+    marginTop: 28,
+    marginBottom: 16,
+    marginHorizontal: 28,
+    paddingHorizontal: 16,
+  },
+  mainTitle: {
+    fontSize: 28,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 8,
+    letterSpacing: -0.34,
+    textAlign: 'left',
+  },
+  subtitle: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#8E8E93',
+    textAlign: 'left',
+  },
 
   cardContainer: { flex: 1 },
-  cardWrapper: { width: SCREEN_WIDTH, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 28 },
+  cardWrapper: {
+    width: SCREEN_WIDTH,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 28,
+  },
   card: {
     backgroundColor: '#FFF',
     borderRadius: 16,
@@ -116,7 +168,12 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 8,
   },
-  cardPlaceholder: { fontSize: 16, fontWeight: '500', color: '#8E8E93', textAlign: 'center' },
+  cardPlaceholder: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#8E8E93',
+    textAlign: 'center',
+  },
   dateButton: {
     backgroundColor: '#FFF',
     paddingHorizontal: 16,
@@ -147,7 +204,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  navItem: { alignItems: 'center', justifyContent: 'center', width: 44, height: 44, borderRadius: 22 },
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+  },
   navIcon: { fontSize: 28, color: '#007AFF' },
 });
 
@@ -191,7 +254,13 @@ const App = () => {
         ]}
         onPress={() => handleCategorySelect(item.name)}
       >
-        <Text style={isSelected ? styles.selectedDropdownItemText : styles.dropdownItemText}>
+        <Text
+          style={
+            isSelected
+              ? styles.selectedDropdownItemText
+              : styles.dropdownItemText
+          }
+        >
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -200,7 +269,10 @@ const App = () => {
 
   const renderTicketItem = ({ item }: any) => (
     <View style={styles.cardWrapper}>
-      <TouchableOpacity style={styles.card} onPress={() => setIsDetailVisible(true)}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => setIsDetailVisible(true)}
+      >
         <Text style={styles.cardPlaceholder}>{item.title}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.dateButton}>
@@ -209,7 +281,8 @@ const App = () => {
     </View>
   );
 
-  if (showNewTicket) return <NewTicket onBack={() => setShowNewTicket(false)} />;
+  if (showNewTicket)
+    return <NewTicket onBack={() => setShowNewTicket(false)} />;
   if (showCalendar) return <Calendar onBack={() => setShowCalendar(false)} />;
   if (showMyPage) return <MyPage onBack={() => setShowMyPage(false)} />;
 
@@ -223,7 +296,11 @@ const App = () => {
         <View style={styles.header}>
           <Text style={styles.logo}>Re:cord</Text>
           <TouchableOpacity
-            style={isDropdownVisible ? styles.dropdownButtonOpen : styles.dropdownButton}
+            style={
+              isDropdownVisible
+                ? styles.dropdownButtonOpen
+                : styles.dropdownButton
+            }
             onPress={() => setIsDropdownVisible(true)}
           >
             <Text style={styles.dropdownText}>{selectedCategory}</Text>
@@ -231,7 +308,11 @@ const App = () => {
               <Text
                 style={[
                   styles.dropdownArrowText,
-                  { transform: [{ rotate: isDropdownVisible ? '180deg' : '0deg' }] },
+                  {
+                    transform: [
+                      { rotate: isDropdownVisible ? '180deg' : '0deg' },
+                    ],
+                  },
                 ]}
               >
                 ▼
@@ -242,15 +323,19 @@ const App = () => {
 
         {/* Title */}
         <View style={styles.titleSection}>
-          <Text style={styles.mainTitle}>{getCurrentMonth()}월에 관람한 공연</Text>
-          <Text style={styles.subtitle}>한 달의 기록, 옆으로 넘기며 다시 만나보세요</Text>
+          <Text style={styles.mainTitle}>
+            {getCurrentMonth()}월에 관람한 공연
+          </Text>
+          <Text style={styles.subtitle}>
+            한 달의 기록, 옆으로 넘기며 다시 만나보세요
+          </Text>
         </View>
 
         {/* Ticket FlatList */}
         <FlatList
           data={tickets}
           renderItem={renderTicketItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={item => item.id.toString()}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -262,13 +347,22 @@ const App = () => {
             <TouchableOpacity style={styles.navItem}>
               <Text style={[styles.navIcon, { color: '#8E8E93' }]}>🎫</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem} onPress={() => setShowNewTicket(true)}>
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => setShowNewTicket(true)}
+            >
               <Text style={styles.navIcon}>➕</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem} onPress={() => setShowCalendar(true)}>
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => setShowCalendar(true)}
+            >
               <Text style={[styles.navIcon, { color: '#8E8E93' }]}>📅</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navItem} onPress={() => setShowMyPage(true)}>
+            <TouchableOpacity
+              style={styles.navItem}
+              onPress={() => setShowMyPage(true)}
+            >
               <Text style={[styles.navIcon, { color: '#8E8E93' }]}>👤</Text>
             </TouchableOpacity>
           </View>
@@ -278,16 +372,33 @@ const App = () => {
       <SafeAreaView style={styles.bottomSafeArea} edges={['bottom']} />
 
       {/* Dropdown */}
-      <Modal visible={isDropdownVisible} transparent animationType="fade" onRequestClose={() => setIsDropdownVisible(false)}>
-        <TouchableOpacity style={styles.dropdownOverlay} activeOpacity={1} onPress={() => setIsDropdownVisible(false)}>
+      <Modal
+        visible={isDropdownVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsDropdownVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.dropdownOverlay}
+          activeOpacity={1}
+          onPress={() => setIsDropdownVisible(false)}
+        >
           <View style={styles.dropdownModal}>
-            <FlatList data={categories} renderItem={renderDropdownItem} keyExtractor={(item) => item.id.toString()} scrollEnabled={false} />
+            <FlatList
+              data={categories}
+              renderItem={renderDropdownItem}
+              keyExtractor={item => item.id.toString()}
+              scrollEnabled={false}
+            />
           </View>
         </TouchableOpacity>
       </Modal>
 
       {/* Detail Modal */}
-      <DetailModal visible={isDetailVisible} onClose={() => setIsDetailVisible(false)} />
+      <DetailModal
+        visible={isDetailVisible}
+        onClose={() => setIsDetailVisible(false)}
+      />
     </SafeAreaProvider>
   );
 };
