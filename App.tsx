@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home_band from './Home_band';
 import Detail from './Detail';
-
 import { enableScreens } from 'react-native-screens';
 
 export type RootStackParamList = {
@@ -18,8 +17,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={Home_band} options={{ headerShown: false }} />
-        <Stack.Screen name="Details" component={Detail} />
+        <Stack.Screen name="Home" component={Home_band} />
+        <Stack.Screen
+          name="Details"
+          component={Detail}
+          options={{
+            presentation: 'modal', // 밑에서 올라오는 모달 스타일
+            animation: 'slide_from_bottom',
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
