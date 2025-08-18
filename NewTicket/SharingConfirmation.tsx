@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,23 +6,32 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  Animated,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-interface SharingConfirmationProps {
-  onBack?: () => void;
-  onComplete?: (isPublic: boolean) => void;
-}
+const SharingConfirmation: React.FC = () => {
+  const navigation = useNavigation<any>();
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
-const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
-  onBack,
-  onComplete,
-}) => {
-  const handlePrivateSelect = () => {
-    onComplete?.(false); // false = private
-  };
+  useEffect(() => {
+    const scaleAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scaleAnim, { toValue: 1.05, duration: 2000, useNativeDriver: true }),
+        Animated.timing(scaleAnim, { toValue: 1, duration: 2000, useNativeDriver: true }),
+      ])
+    );
 
-  const handlePublicSelect = () => {
-    onComplete?.(true); // true = public
+    scaleAnimation.start();
+    return () => scaleAnimation.stop();
+  }, [scaleAnim]);
+
+  // 스택 전체 초기화 후 Home으로 이동
+  const goHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
   };
 
   return (
@@ -32,7 +41,7 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
 
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
         </View>
@@ -48,8 +57,7 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
 
           {/* Ticket Preview */}
           <View style={styles.ticketContainer}>
-            <View style={styles.ticketCard}>
-              {/* Mock ticket design */}
+            <Animated.View style={[styles.ticketCard, { transform: [{ scale: scaleAnim }] }]}>
               <View style={styles.ticketHeader}>
                 <Text style={styles.ticketTitle}>JAMONG{'\n'}SALGU CLUB</Text>
                 <View style={styles.starsContainer}>
@@ -80,20 +88,15 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
                   <Text style={styles.timeText}>TOMORROW★{'\n'}AT 5PM</Text>
                 </View>
               </View>
-            </View>
+            </Animated.View>
           </View>
+
           {/* Action Buttons */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.privateButton}
-              onPress={handlePrivateSelect}
-            >
+            <TouchableOpacity style={styles.privateButton} onPress={goHome}>
               <Text style={styles.privateButtonText}>아니요</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={handlePublicSelect}
-            >
+            <TouchableOpacity style={styles.shareButton} onPress={goHome}>
               <Text style={styles.shareButtonText}>공개할게요</Text>
             </TouchableOpacity>
           </View>
@@ -104,14 +107,8 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
+  safeAreaContainer: { flex: 1, backgroundColor: '#F2F2F7' },
+  container: { flex: 1, backgroundColor: '#F2F2F7' },
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -120,43 +117,12 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 16,
   },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backIcon: {
-    fontSize: 24,
-    fontWeight: '400',
-    color: '#000',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 28,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 8,
-    marginTop: 20,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  ticketContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 40,
-  },
+  backButton: { width: 44, height: 44, justifyContent: 'center', alignItems: 'center' },
+  backIcon: { fontSize: 24, fontWeight: '400', color: '#000' },
+  content: { flex: 1, paddingHorizontal: 28, alignItems: 'center' },
+  title: { fontSize: 20, fontWeight: '700', color: '#000', textAlign: 'center', marginBottom: 8, marginTop: 20 },
+  subtitle: { fontSize: 14, fontWeight: '400', color: '#666', textAlign: 'center', marginBottom: 40 },
+  ticketContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 40 },
   ticketCard: {
     width: 240,
     height: 340,
@@ -169,102 +135,22 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 8,
   },
-  ticketHeader: {
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  ticketTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: '#000',
-    letterSpacing: 1,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 6,
-    width: 70,
-  },
-  star: {
-    fontSize: 10,
-    color: '#000',
-    marginRight: 3,
-    marginBottom: 2,
-  },
-  ticketBody: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  circleDesign: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#FF6B35',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  circleText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#FFF',
-    textAlign: 'center',
-    fontStyle: 'italic',
-  },
-  ticketInfo: {
-    alignItems: 'center',
-  },
-  secretText: {
-    fontSize: 7,
-    fontWeight: '600',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 6,
-  },
-  dateText: {
-    fontSize: 7,
-    fontWeight: '500',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 6,
-  },
-  timeText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: '#000',
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingBottom: 40,
-    width: '100%',
-  },
-  privateButton: {
-    flex: 1,
-    backgroundColor: '#FFE5E5',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  privateButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FF3B30',
-  },
-  shareButton: {
-    flex: 1,
-    backgroundColor: '#FF3B30',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  shareButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFF',
-  },
+  ticketHeader: { alignItems: 'flex-start', marginBottom: 16 },
+  ticketTitle: { fontSize: 16, fontWeight: '900', color: '#000', letterSpacing: 1 },
+  starsContainer: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 6, width: 70 },
+  star: { fontSize: 10, color: '#000', marginRight: 3, marginBottom: 2 },
+  ticketBody: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  circleDesign: { width: 120, height: 120, borderRadius: 60, backgroundColor: '#FF6B35', justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
+  circleText: { fontSize: 14, fontWeight: '700', color: '#FFF', textAlign: 'center', fontStyle: 'italic' },
+  ticketInfo: { alignItems: 'center' },
+  secretText: { fontSize: 7, fontWeight: '600', color: '#000', textAlign: 'center', marginBottom: 6 },
+  dateText: { fontSize: 7, fontWeight: '500', color: '#000', textAlign: 'center', marginBottom: 6 },
+  timeText: { fontSize: 9, fontWeight: '700', color: '#000', textAlign: 'center' },
+  buttonContainer: { flexDirection: 'row', gap: 12, paddingBottom: 40, width: '100%' },
+  privateButton: { flex: 1, backgroundColor: '#FFE5E5', borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
+  privateButtonText: { fontSize: 16, fontWeight: '600', color: '#FF3B30' },
+  shareButton: { flex: 1, backgroundColor: '#FF3B30', borderRadius: 12, paddingVertical: 16, alignItems: 'center' },
+  shareButtonText: { fontSize: 16, fontWeight: '600', color: '#FFF' },
 });
 
 export default SharingConfirmation;

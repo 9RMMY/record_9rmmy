@@ -6,15 +6,17 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
-  Image,
 } from 'react-native';
 
 interface TicketCompletionProps {
-  onBack?: () => void;
-  onNext?: () => void;
+  onBack?: () => void; // AIImageGeneration으로 돌아가기
+  onNext?: () => void; // 확정하기
 }
 
-const TicketCompletion: React.FC<TicketCompletionProps> = ({ onBack, onNext }) => {
+const TicketCompletion: React.FC<TicketCompletionProps> = ({
+  onBack,
+  onNext,
+}) => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
@@ -30,28 +32,37 @@ const TicketCompletion: React.FC<TicketCompletionProps> = ({ onBack, onNext }) =
         {/* Content */}
         <View style={styles.content}>
           <Text style={styles.title}>이미지가 완성되었어요!</Text>
-          
+
           {/* Ticket Image */}
           <View style={styles.ticketContainer}>
             <View style={styles.ticketCard}>
-              {/* Mock ticket design - replace with actual generated image */}
               <View style={styles.ticketHeader}>
                 <Text style={styles.ticketTitle}>JAMONG{'\n'}SALGU CLUB</Text>
                 <View style={styles.starsContainer}>
                   {[...Array(8)].map((_, i) => (
-                    <Text key={i} style={styles.star}>★</Text>
+                    <Text key={i} style={styles.star}>
+                      ★
+                    </Text>
                   ))}
                 </View>
               </View>
-              
+
               <View style={styles.ticketBody}>
                 <View style={styles.circleDesign}>
-                  <Text style={styles.circleText}>Jamong{'\n'}Salgu{'\n'}Club</Text>
+                  <Text style={styles.circleText}>
+                    Jamong{'\n'}Salgu{'\n'}Club
+                  </Text>
                 </View>
-                
+
                 <View style={styles.ticketInfo}>
-                  <Text style={styles.secretText}>SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY{'\n'}WANT TO DIE) (PLEASE)</Text>
-                  <Text style={styles.dateText}>IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND COME THE MUSIC ROOM</Text>
+                  <Text style={styles.secretText}>
+                    SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY
+                    {'\n'}WANT TO DIE) (PLEASE)
+                  </Text>
+                  <Text style={styles.dateText}>
+                    IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND
+                    COME THE MUSIC ROOM
+                  </Text>
                   <Text style={styles.timeText}>TOMORROW★{'\n'}AT 5PM</Text>
                 </View>
               </View>
@@ -60,7 +71,7 @@ const TicketCompletion: React.FC<TicketCompletionProps> = ({ onBack, onNext }) =
 
           {/* Action Buttons */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.regenerateButton}>
+            <TouchableOpacity style={styles.regenerateButton} onPress={onBack}>
               <Text style={styles.regenerateButtonText}>다시 생성하기</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.confirmButton} onPress={onNext}>
@@ -74,14 +85,8 @@ const TicketCompletion: React.FC<TicketCompletionProps> = ({ onBack, onNext }) =
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
+  safeAreaContainer: { flex: 1, backgroundColor: '#F2F2F7' },
+  container: { flex: 1, backgroundColor: '#F2F2F7' },
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -96,18 +101,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backIcon: {
-    fontSize: 24,
-    fontWeight: '400',
-    color: '#000',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 28,
-    alignItems: 'center',
-  },
+  backIcon: { fontSize: 24, fontWeight: '400', color: '#000' },
+  content: { flex: 1, paddingHorizontal: 28, alignItems: 'center' },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
     color: '#000',
     textAlign: 'center',
@@ -131,10 +128,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 8,
   },
-  ticketHeader: {
-    alignItems: 'flex-start',
-    marginBottom: 20,
-  },
+  ticketHeader: { alignItems: 'flex-start', marginBottom: 20 },
   ticketTitle: {
     fontSize: 18,
     fontWeight: '900',
@@ -147,17 +141,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     width: 80,
   },
-  star: {
-    fontSize: 12,
-    color: '#000',
-    marginRight: 4,
-    marginBottom: 2,
-  },
-  ticketBody: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  star: { fontSize: 12, color: '#000', marginRight: 4, marginBottom: 2 },
+  ticketBody: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   circleDesign: {
     width: 140,
     height: 140,
@@ -174,9 +159,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
   },
-  ticketInfo: {
-    alignItems: 'center',
-  },
+  ticketInfo: { alignItems: 'center' },
   secretText: {
     fontSize: 8,
     fontWeight: '600',
@@ -197,11 +180,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingBottom: 40,
-  },
+  buttonContainer: { flexDirection: 'row', gap: 12, paddingBottom: 40 },
   regenerateButton: {
     flex: 1,
     backgroundColor: '#FFE5E5',
@@ -209,11 +188,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
   },
-  regenerateButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FF3B30',
-  },
+  regenerateButtonText: { fontSize: 16, fontWeight: '600', color: '#FF3B30' },
   confirmButton: {
     flex: 1,
     backgroundColor: '#FF3B30',
@@ -221,11 +196,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
   },
-  confirmButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFF',
-  },
+  confirmButtonText: { fontSize: 16, fontWeight: '600', color: '#FFF' },
 });
 
 export default TicketCompletion;

@@ -16,6 +16,7 @@ interface AIImageGenerationProps {
 
 const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplete }) => {
   const [showLoading, setShowLoading] = useState(false);
+  const [pressedCard, setPressedCard] = useState<string | null>(null);
 
   const handleAIImageSelect = () => {
     setShowLoading(true);
@@ -35,21 +36,33 @@ const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplet
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
 
-        {/* Header */}
+        {/* Header Back Button */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>공연후기 작성하기</Text>
-            <Text style={styles.headerSubtitle}>오늘 공연에서 가장에 남는 장면은 무엇인가요?</Text>
-          </View>
-          <View style={styles.placeholder} />
+        </View>
+
+        {/* Title & Subtitle */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>공연후기 작성하기</Text>
+          <Text style={styles.subtitle}>
+            오늘 공연에서 가장 기억에 남는 장면은 무엇인가요?
+          </Text>
         </View>
 
         <View style={styles.content}>
           {/* AI 생성형 이미지 옵션 */}
-          <TouchableOpacity style={[styles.optionCard, styles.highlightedCard]} onPress={handleAIImageSelect}>
+          <TouchableOpacity
+            style={[
+              styles.optionCard,
+              styles.highlightedCard,
+              pressedCard === 'ai' && styles.pressedCard
+            ]}
+            onPress={handleAIImageSelect}
+            onPressIn={() => setPressedCard('ai')}
+            onPressOut={() => setPressedCard(null)}
+          >
             <View style={styles.iconContainer}>
               <View style={styles.iconPlaceholder} />
             </View>
@@ -63,7 +76,15 @@ const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplet
           </TouchableOpacity>
 
           {/* 파일 업로드 옵션 */}
-          <TouchableOpacity style={styles.optionCard}>
+          <TouchableOpacity
+            style={[
+              styles.optionCard,
+              pressedCard === 'file' && styles.pressedCard
+            ]}
+            onPress={() => {}}
+            onPressIn={() => setPressedCard('file')}
+            onPressOut={() => setPressedCard(null)}
+          >
             <View style={styles.iconContainer}>
               <View style={styles.iconPlaceholder} />
             </View>
@@ -80,6 +101,8 @@ const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplet
   );
 };
 
+const CARD_HEIGHT = 120; // 카드 높이 고정
+
 const styles = StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
@@ -91,11 +114,9 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 24,
+    paddingBottom: 0,
   },
   backButton: {
     width: 44,
@@ -109,28 +130,27 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000',
   },
-  headerCenter: {
-    flex: 1,
+
+  // Title & Subtitle
+  titleContainer: {
     alignItems: 'center',
     paddingHorizontal: 16,
+    marginBottom: 20,
   },
-  headerTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 28,
     fontWeight: '700',
     color: '#000',
     textAlign: 'center',
     marginBottom: 4,
   },
-  headerSubtitle: {
-    fontSize: 12,
+  subtitle: {
+    fontSize: 14,
     fontWeight: '400',
     color: '#8E8E93',
     textAlign: 'center',
   },
-  placeholder: {
-    width: 44,
-    height: 44,
-  },
+
   content: {
     flex: 1,
     paddingHorizontal: 28,
@@ -148,11 +168,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
+    height: CARD_HEIGHT, // 카드 높이 고정
   },
   highlightedCard: {
     backgroundColor: '#FFE5E5',
     borderWidth: 1,
     borderColor: '#FF3B30',
+  },
+  pressedCard: {
+    backgroundColor: '#FFCCCC', // 눌렀을 때 진해지는 효과
   },
   iconContainer: {
     marginRight: 16,

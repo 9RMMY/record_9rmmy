@@ -3,89 +3,82 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   StatusBar,
   ImageBackground,
   Text,
   Image,
 } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from './App';
 
-interface DetailModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
+type DetailScreenProps = NativeStackScreenProps<RootStackParamList, 'Details'>;
 
-const DetailModal: React.FC<DetailModalProps> = ({ visible, onClose }) => {
+const Detail: React.FC<DetailScreenProps> = ({ navigation, route }) => {
+  const { ticketId } = route.params || {};
+
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={onClose}
-    >
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="white" />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
 
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} style={styles.backButton}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image
+            source={require('./img/back.png')}
+            style={styles.backIconImage}
+          />
+        </TouchableOpacity>
+
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.iconButton}>
             <Image
-              source={require('./img/back.png')}
-              style={styles.backIconImage}
+              source={require('./img/share.png')}
+              style={styles.headerIcon}
             />
           </TouchableOpacity>
-
-          <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.iconButton}>
-              <Image
-                source={require('./img/share.png')}
-                style={styles.headerIcon}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Image
-                source={require('./img/pending.png')}
-                style={styles.headerIcon}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Ticket Container */}
-        <View style={styles.cardContainer}>
-          <ImageBackground
-            source={require('./img/Ticket.png')}
-            style={styles.ticketImage}
-            resizeMode="contain"
-          >
-            {/* Poster Placeholder */}
-            <View style={styles.posterCard} />
-
-            {/* Title Section */}
-            <View style={styles.titleSection}>
-              <Text style={styles.eventTitle}>제목을 입력해주세요.</Text>
-              <Text style={styles.eventDate}>날짜를 입력해주세요.</Text>
-            </View>
-          </ImageBackground>
-
-          {/* Event Details */}
-          <View style={styles.detailsSection}>
-            {[
-              ['일시', '날짜를 입력해주세요.'],
-              ['장소', '장소를 입력해주세요.'],
-              ['출연', '밴드명을 입력해주세요.'],
-              ['좌석번호', '좌석번호를 입력해주세요.'],
-              ['예매처', '예매처를 입력해주세요.'],
-            ].map(([label, value]) => (
-              <View key={label} style={styles.detailRow}>
-                <Text style={styles.detailLabel}>{label}</Text>
-                <Text style={styles.detailValue}>{value}</Text>
-              </View>
-            ))}
-          </View>
+          <TouchableOpacity style={styles.iconButton}>
+            <Image
+              source={require('./img/pending.png')}
+              style={styles.headerIcon}
+            />
+          </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+
+      {/* Ticket Container */}
+      <View style={styles.cardContainer}>
+        <ImageBackground
+          source={require('./img/Ticket.png')}
+          style={styles.ticketImage}
+          resizeMode="contain"
+        >
+          {/* Poster Placeholder */}
+          <View style={styles.posterCard} />
+
+          {/* Title Section */}
+          <View style={styles.titleSection}>
+            <Text style={styles.eventTitle}>제목을 입력해주세요.</Text>
+            <Text style={styles.eventDate}>날짜를 입력해주세요.</Text>
+          </View>
+        </ImageBackground>
+
+        {/* Event Details */}
+        <View style={styles.detailsSection}>
+          {[
+            ['일시', '날짜를 입력해주세요.'],
+            ['장소', '장소를 입력해주세요.'],
+            ['출연', '밴드명을 입력해주세요.'],
+            ['좌석번호', '좌석번호를 입력해주세요.'],
+            ['예매처', '예매처를 입력해주세요.'],
+          ].map(([label, value]) => (
+            <View key={label} style={styles.detailRow}>
+              <Text style={styles.detailLabel}>{label}</Text>
+              <Text style={styles.detailValue}>{value}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -198,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailModal;
+export default Detail;

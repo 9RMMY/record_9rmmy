@@ -10,10 +10,14 @@ import {
   Dimensions,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import DetailModal from './Detail';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from './App';
 import NewTicket from './NewTicket/NewTicket';
 import Calendar from './Calendar';
 import MyPage from './MyPage';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -214,8 +218,8 @@ const styles = StyleSheet.create({
   navIcon: { fontSize: 28, color: '#007AFF' },
 });
 
-const App = () => {
-  const [isDetailVisible, setIsDetailVisible] = useState(false);
+const Home_band = () => {
+  const navigation = useNavigation<NavigationProp>();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('밴드');
   const [showNewTicket, setShowNewTicket] = useState(false);
@@ -271,7 +275,7 @@ const App = () => {
     <View style={styles.cardWrapper}>
       <TouchableOpacity
         style={styles.card}
-        onPress={() => setIsDetailVisible(true)}
+        onPress={() => navigation.navigate('Details', { ticketId: item.id })}
       >
         <Text style={styles.cardPlaceholder}>{item.title}</Text>
       </TouchableOpacity>
@@ -394,13 +398,8 @@ const App = () => {
         </TouchableOpacity>
       </Modal>
 
-      {/* Detail Modal */}
-      <DetailModal
-        visible={isDetailVisible}
-        onClose={() => setIsDetailVisible(false)}
-      />
     </SafeAreaProvider>
   );
 };
 
-export default App;
+export default Home_band;

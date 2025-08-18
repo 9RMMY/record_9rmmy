@@ -18,11 +18,13 @@ interface NewTicketProps {
 }
 
 const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
-  // 🎯 공연장르 기본값을 "밴드"로 설정
-  const [selectedGenre, setSelectedGenre] = useState<'밴드' | '연극/뮤지컬'>('밴드');
-  const [currentScreen, setCurrentScreen] = useState<'form' | 'options' | 'recording' | 'ai'>('form');
+  const [selectedGenre, setSelectedGenre] = useState<'밴드' | '연극/뮤지컬'>(
+    '밴드',
+  );
+  const [currentScreen, setCurrentScreen] = useState<
+    'form' | 'options' | 'recording' | 'ai'
+  >('form');
 
-  // Screen navigation handlers
   const handleCompleteForm = () => setCurrentScreen('options');
   const handleOptionsNext = () => setCurrentScreen('recording');
   const handleRecordingNext = () => setCurrentScreen('ai');
@@ -30,19 +32,15 @@ const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
   const handleBackToOptions = () => setCurrentScreen('options');
   const handleBackToRecording = () => setCurrentScreen('recording');
 
-  // Render different screens based on current state
   if (currentScreen === 'options') {
     return (
-      <RecordingOptions 
-        onBack={handleBackToForm}
-        onNext={handleOptionsNext}
-      />
+      <RecordingOptions onBack={handleBackToForm} onNext={handleOptionsNext} />
     );
   }
 
   if (currentScreen === 'recording') {
     return (
-      <VoiceRecording 
+      <VoiceRecording
         onBack={handleBackToOptions}
         onNext={handleRecordingNext}
       />
@@ -51,10 +49,7 @@ const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
 
   if (currentScreen === 'ai') {
     return (
-      <AIImageGeneration 
-        onBack={handleBackToRecording}
-        onComplete={onBack}
-      />
+      <AIImageGeneration onBack={handleBackToRecording} onComplete={onBack} />
     );
   }
 
@@ -68,76 +63,44 @@ const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>공연 정보 입력하기</Text>
-            <Text style={styles.headerSubtitle}>관람하신 공연의 정보를 입력해주세요.</Text>
-          </View>
-          <TouchableOpacity style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>저장</Text>
-          </TouchableOpacity>
         </View>
 
-        <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>공연 정보 입력하기</Text>
+          <Text style={styles.subtitle}>
+            관람하신 공연의 정보를 입력해주세요.
+          </Text>
+        </View>
+
+        <ScrollView
+          style={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.formContainer}>
-            {/* 공연명 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>공연명</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="공연명을 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
+            {['공연명', '일시', '장소', '출연', '좌석번호', '예매처'].map(
+              label => (
+                <View style={styles.inlineField} key={label}>
+                  <Text style={styles.inlineLabel}>{label}</Text>
+                  <TextInput
+                    style={styles.inlineInput}
+                    placeholder={`${label}을 입력하세요.`}
+                    placeholderTextColor="#A0A0A0"
+                  />
+                </View>
+              ),
+            )}
 
-            {/* 일시 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>일시</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="일시를 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
-
-            {/* 장소 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>장소</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="장소를 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
-
-            {/* 출연 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>출연</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="아티스트명을 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
-
-            {/* 좌석번호 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>좌석번호</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="좌석번호를 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
-
-            {/* 공연장르 - 라벨 + 라디오 버튼 인라인 */}
-            <View style={styles.inlineField}>
+            {/* 공연장르 - 라디오 버튼 (밑줄 제거) */}
+            <View style={styles.radioField}>
               <Text style={styles.inlineLabel}>공연장르</Text>
               <View style={styles.radioGroup}>
-                {['밴드', '연극/뮤지컬'].map((genre) => (
+                {['밴드', '연극/뮤지컬'].map(genre => (
                   <TouchableOpacity
                     key={genre}
                     style={styles.radioOption}
-                    onPress={() => setSelectedGenre(genre as '밴드' | '연극/뮤지컬')}
+                    onPress={() =>
+                      setSelectedGenre(genre as '밴드' | '연극/뮤지컬')
+                    }
                   >
                     <View style={styles.radioCircle}>
                       {selectedGenre === genre && <View style={styles.radioDot} />}
@@ -147,20 +110,12 @@ const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
                 ))}
               </View>
             </View>
-
-            {/* 예매처 */}
-            <View style={styles.inlineField}>
-              <Text style={styles.inlineLabel}>예매처</Text>
-              <TextInput
-                style={styles.inlineInput}
-                placeholder="예매처를 입력하세요."
-                placeholderTextColor="#A0A0A0"
-              />
-            </View>
           </View>
 
-          {/* Complete Button */}
-          <TouchableOpacity style={styles.completeButton} onPress={handleCompleteForm}>
+          <TouchableOpacity
+            style={styles.completeButton}
+            onPress={handleCompleteForm}
+          >
             <Text style={styles.completeButtonText}>완료</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -170,14 +125,8 @@ const NewTicket: React.FC<NewTicketProps> = ({ onBack }) => {
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
+  safeAreaContainer: { flex: 1, backgroundColor: '#F2F2F7' },
+  container: { flex: 1, backgroundColor: '#F2F2F7' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -193,46 +142,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
-  backIcon: {
-    fontSize: 24,
-    fontWeight: '400',
-    color: '#000',
+  backIcon: { fontSize: 24, fontWeight: '400', color: '#000' },
+
+  titleContainer: { 
+    alignItems: 'center', 
+    paddingHorizontal: 16, 
+    marginBottom: 20,
   },
-  headerCenter: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
-  headerTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 28,
     fontWeight: '700',
     color: '#000',
     textAlign: 'center',
     marginBottom: 4,
   },
-  headerSubtitle: {
-    fontSize: 12,
+  subtitle: {
+    fontSize: 14,
     fontWeight: '400',
     color: '#8E8E93',
     textAlign: 'center',
   },
-  saveButton: {
-    backgroundColor: '#FF3B30',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  saveButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#FFF',
-  },
-  scrollContent: {
-    flex: 1,
-  },
+
+  scrollContent: { flex: 1 },
+  
   formContainer: {
     backgroundColor: '#FFF',
     marginHorizontal: 28,
@@ -243,23 +175,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
-    elevation: 4,
   },
-  // 🎯 inline 스타일 (모든 필드 공통)
   inlineField: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
-    paddingBottom: 8,
   },
   inlineLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: '#000',
     marginRight: 12,
-    width: 80, // 라벨 고정폭 → 정렬 맞추기
+    width: 80,
   },
   inlineInput: {
     flex: 1,
@@ -268,17 +197,15 @@ const styles = StyleSheet.create({
     color: '#000',
     paddingVertical: 8,
   },
-  // 라디오 버튼
-  radioGroup: {
+
+  // 라디오 버튼 전용 필드 (밑줄 없음)
+  radioField: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    marginBottom: 20,
   },
-  radioOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 20,
-  },
+  radioGroup: { flexDirection: 'row', alignItems: 'center', gap: 20 },
+  radioOption: { flexDirection: 'row', alignItems: 'center', marginRight: 20 },
   radioCircle: {
     width: 20,
     height: 20,
@@ -295,10 +222,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#FF3B30',
   },
-  radioLabel: {
-    fontSize: 16,
-    color: '#000',
-  },
+  radioLabel: { fontSize: 16, color: '#000' },
+
   completeButton: {
     backgroundColor: '#FF3B30',
     marginHorizontal: 28,
@@ -307,11 +232,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
-  completeButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFF',
-  },
+  completeButtonText: { fontSize: 16, fontWeight: '600', color: '#FFF' },
 });
 
 export default NewTicket;

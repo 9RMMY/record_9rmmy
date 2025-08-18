@@ -30,13 +30,14 @@ const VoiceRecording: React.FC<VoiceRecordingProps> = ({ onBack, onNext }) => {
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>공연후기 작성하기</Text>
-            <Text style={styles.headerSubtitle}>오늘 공연에서 가장에 남는 장면은 무엇인가요?</Text>
-          </View>
-          <TouchableOpacity style={styles.recordButton}>
-            <View style={styles.recordIcon} />
-          </TouchableOpacity>
+        </View>
+
+        {/* Title & Subtitle */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>공연후기 작성하기</Text>
+          <Text style={styles.subtitle}>
+            오늘 공연에서 가장 기억에 남는 장면은 무엇인가요?
+          </Text>
         </View>
 
         {/* Recording Area */}
@@ -68,11 +69,9 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 24,
+    paddingBottom: 0,
   },
   backButton: {
     width: 44,
@@ -86,39 +85,27 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000',
   },
-  headerCenter: {
-    flex: 1,
+
+  // Title & Subtitle NewTicket 스타일 동일 적용
+  titleContainer: {
     alignItems: 'center',
     paddingHorizontal: 16,
+    marginBottom: 20,
   },
-  headerTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 28,
     fontWeight: '700',
     color: '#000',
     textAlign: 'center',
     marginBottom: 4,
   },
-  headerSubtitle: {
-    fontSize: 12,
+  subtitle: {
+    fontSize: 14,
     fontWeight: '400',
     color: '#8E8E93',
     textAlign: 'center',
   },
-  recordButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#FFE5E5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  recordIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: '#FF3B30',
-  },
+
   recordingArea: {
     flex: 1,
     paddingHorizontal: 28,

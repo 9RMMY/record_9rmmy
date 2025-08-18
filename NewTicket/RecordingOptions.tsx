@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,70 +7,76 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
+import AIImageLoading from './AIImageLoading';
 
-interface RecordingOptionsProps {
+interface AIImageGenerationProps {
   onBack?: () => void;
-  onNext?: () => void;
+  onComplete?: () => void;
 }
 
-const RecordingOptions: React.FC<RecordingOptionsProps> = ({ onBack, onNext }) => {
+const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplete }) => {
+  const [showLoading, setShowLoading] = useState(false);
+
+  const handleAIImageSelect = () => {
+    setShowLoading(true);
+  };
+
+  if (showLoading) {
+    return (
+      <AIImageLoading 
+        onBack={() => setShowLoading(false)}
+        onComplete={onComplete}
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
 
-        {/* Header */}
+        {/* Header Back Button */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
-          <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>공연후기 작성하기</Text>
-            <Text style={styles.headerSubtitle}>오늘 공연에서 가장에 남는 장면은 무엇인가요?</Text>
-          </View>
-          <View style={styles.placeholder} />
+        </View>
+
+        {/* Title & Subtitle */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>공연후기 작성하기</Text>
+          <Text style={styles.subtitle}>
+            오늘 공연에서 가장 기억에 남는 장면은 무엇인가요?
+          </Text>
         </View>
 
         <View style={styles.content}>
-          {/* 음성녹음 옵션 */}
-          <TouchableOpacity style={[styles.optionCard, styles.highlightedCard]} onPress={onNext}>
+          {/* AI 생성형 이미지 옵션 */}
+          <TouchableOpacity
+            style={[styles.optionCard, styles.highlightedCard]}
+            onPress={handleAIImageSelect}
+          >
             <View style={styles.iconContainer}>
               <View style={styles.iconPlaceholder} />
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.optionTitle}>음성녹음</Text>
+              <Text style={styles.optionTitle}>AI 생성형 이미지</Text>
               <Text style={styles.optionDescription}>
-                마이크를 켜고 음성으로 사용하세요.{'\n'}
-                마이크를 켜고 녹음을 해보세요!{'\n'}
-                AMRO 아직메뉴는 못
+                관람한 공연에 맞는 이미지를{'\n'}
+                AI가 생성해드립니다.
               </Text>
             </View>
           </TouchableOpacity>
 
-          {/* 녹음 파일 업로드 옵션 */}
+          {/* 파일 업로드 옵션 */}
           <TouchableOpacity style={styles.optionCard}>
             <View style={styles.iconContainer}>
               <View style={styles.iconPlaceholder} />
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.optionTitle}>녹음 파일 업로드</Text>
+              <Text style={styles.optionTitle}>파일 업로드</Text>
               <Text style={styles.optionDescription}>
-                녹음한 파일을 업로드해서 정리하고 그것으로{'\n'}
-                이걸 쓰세요 쓰세요 쓰세요 쓰세요
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          {/* 직접 작성 옵션 */}
-          <TouchableOpacity style={styles.optionCard}>
-            <View style={styles.iconContainer}>
-              <View style={styles.iconPlaceholder} />
-            </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.optionTitle}>직접 작성</Text>
-              <Text style={styles.optionDescription}>
-                마이크로 못쓰고 녹음도 없으면 직접{'\n'}
-                키보드로 직접 작성을
+                사진첩에서 파일을 업로드 하세요.
               </Text>
             </View>
           </TouchableOpacity>
@@ -91,11 +97,9 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 24,
+    paddingBottom: 0,
   },
   backButton: {
     width: 44,
@@ -109,28 +113,27 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000',
   },
-  headerCenter: {
-    flex: 1,
+
+  // Title & Subtitle NewTicket 스타일 동일 적용
+  titleContainer: {
     alignItems: 'center',
     paddingHorizontal: 16,
+    marginBottom: 20,
   },
-  headerTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 28,
     fontWeight: '700',
     color: '#000',
     textAlign: 'center',
     marginBottom: 4,
   },
-  headerSubtitle: {
-    fontSize: 12,
+  subtitle: {
+    fontSize: 14,
     fontWeight: '400',
     color: '#8E8E93',
     textAlign: 'center',
   },
-  placeholder: {
-    width: 44,
-    height: 44,
-  },
+
   content: {
     flex: 1,
     paddingHorizontal: 28,
@@ -181,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecordingOptions;
+export default AIImageGeneration;

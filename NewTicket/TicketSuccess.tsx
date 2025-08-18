@@ -15,7 +15,6 @@ interface TicketSuccessProps {
 }
 
 const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {
-  const sparkleAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -24,58 +23,26 @@ const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {
       onNext?.();
     }, 5000);
 
-    // Sparkle animation
-    const sparkleAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(sparkleAnim, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(sparkleAnim, {
-          toValue: 0,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
     // Scale animation for ticket
     const scaleAnimation = Animated.loop(
       Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1.05,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
+        Animated.timing(scaleAnim, { toValue: 1.05, duration: 2000, useNativeDriver: true }),
+        Animated.timing(scaleAnim, { toValue: 1, duration: 2000, useNativeDriver: true }),
       ])
     );
 
-    sparkleAnimation.start();
     scaleAnimation.start();
 
     return () => {
       clearTimeout(timer);
-      sparkleAnimation.stop();
       scaleAnimation.stop();
     };
-  }, [onNext, sparkleAnim, scaleAnim]);
-
-  const sparkleOpacity = sparkleAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0.3, 1, 0.3],
-  });
+  }, [onNext, scaleAnim]);
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
-
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
@@ -87,29 +54,16 @@ const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {
         <View style={styles.content}>
           <Text style={styles.title}>새로운 티켓 생성 완료~!</Text>
           <Text style={styles.subtitle}>하나의 추억을 저장했어요.</Text>
-          
+
           {/* Ticket Preview */}
-          <View style={styles.ticketContainer}>
-            <Animated.View style={[
+          <Animated.View
+            style={[
               styles.ticketCard,
-              {
-                transform: [{ scale: scaleAnim }]
-              }
-            ]}>
-              {/* Sparkle Effects */}
-              <Animated.View style={[styles.sparkle, styles.sparkle1, { opacity: sparkleOpacity }]}>
-                <Text style={styles.sparkleText}>✨</Text>
-              </Animated.View>
-              <Animated.View style={[styles.sparkle, styles.sparkle2, { opacity: sparkleOpacity }]}>
-                <Text style={styles.sparkleText}>✨</Text>
-              </Animated.View>
-              <Animated.View style={[styles.sparkle, styles.sparkle3, { opacity: sparkleOpacity }]}>
-                <Text style={styles.sparkleText}>✨</Text>
-              </Animated.View>
-              <Animated.View style={[styles.sparkle, styles.sparkle4, { opacity: sparkleOpacity }]}>
-                <Text style={styles.sparkleText}>✨</Text>
-              </Animated.View>
-              {/* Mock ticket design */}
+              { transform: [{ scale: scaleAnim }] }
+            ]}
+          >
+            {/* Mock ticket content */}
+            <View style={styles.ticketInner}>
               <View style={styles.ticketHeader}>
                 <Text style={styles.ticketTitle}>JAMONG{'\n'}SALGU CLUB</Text>
                 <View style={styles.starsContainer}>
@@ -118,20 +72,24 @@ const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {
                   ))}
                 </View>
               </View>
-              
+
               <View style={styles.ticketBody}>
                 <View style={styles.circleDesign}>
                   <Text style={styles.circleText}>Jamong{'\n'}Salgu{'\n'}Club</Text>
                 </View>
-                
+
                 <View style={styles.ticketInfo}>
-                  <Text style={styles.secretText}>SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY{'\n'}WANT TO DIE) (PLEASE)</Text>
-                  <Text style={styles.dateText}>IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND COME THE MUSIC ROOM</Text>
+                  <Text style={styles.secretText}>
+                    SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY{'\n'}WANT TO DIE) (PLEASE)
+                  </Text>
+                  <Text style={styles.dateText}>
+                    IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND COME THE MUSIC ROOM
+                  </Text>
                   <Text style={styles.timeText}>TOMORROW★{'\n'}AT 5PM</Text>
                 </View>
               </View>
-            </Animated.View>
-          </View>
+            </View>
+          </Animated.View>
         </View>
       </View>
     </SafeAreaView>
@@ -139,159 +97,49 @@ const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
+  safeAreaContainer: { flex: 1, backgroundColor: '#F2F2F7' },
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 16,
   },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backIcon: {
-    fontSize: 24,
-    fontWeight: '400',
-    color: '#000',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 60,
-  },
-  ticketContainer: {
-    alignItems: 'center',
-  },
+  backButton: { width: 44, height: 44, justifyContent: 'center', alignItems: 'center' },
+  backIcon: { fontSize: 24, color: '#000' },
+  content: { alignItems: 'center', justifyContent: 'center' },
+  title: { fontSize: 24, fontWeight: '700', color: '#000', textAlign: 'center', marginBottom: 8 },
+  subtitle: { fontSize: 16, fontWeight: '400', color: '#666', textAlign: 'center', marginBottom: 40 },
   ticketCard: {
     width: 280,
     height: 400,
     backgroundColor: '#7CB342',
     borderRadius: 20,
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
     shadowRadius: 20,
     elevation: 8,
   },
-  ticketHeader: {
-    alignItems: 'flex-start',
-    marginBottom: 20,
-  },
-  ticketTitle: {
-    fontSize: 18,
-    fontWeight: '900',
-    color: '#000',
-    letterSpacing: 1,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 8,
-    width: 80,
-  },
-  star: {
-    fontSize: 12,
-    color: '#000',
-    marginRight: 4,
-    marginBottom: 2,
-  },
-  ticketBody: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  circleDesign: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: '#FF6B35',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  circleText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#FFF',
-    textAlign: 'center',
-    fontStyle: 'italic',
-  },
-  ticketInfo: {
-    alignItems: 'center',
-  },
-  secretText: {
-    fontSize: 8,
-    fontWeight: '600',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  dateText: {
-    fontSize: 8,
-    fontWeight: '500',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  timeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#000',
-    textAlign: 'center',
-  },
-  // Sparkle effect styles
-  sparkle: {
-    position: 'absolute',
-    zIndex: 10,
-  },
-  sparkle1: {
-    top: -10,
-    left: -10,
-  },
-  sparkle2: {
-    top: -15,
-    right: -5,
-  },
-  sparkle3: {
-    bottom: -10,
-    left: -5,
-  },
-  sparkle4: {
-    bottom: -15,
-    right: -10,
-  },
-  sparkleText: {
-    fontSize: 20,
-    color: '#FFD700',
-  },
+  ticketInner: { flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center' },
+  ticketHeader: { alignItems: 'center', marginBottom: 20 },
+  ticketTitle: { fontSize: 18, fontWeight: '900', color: '#000', textAlign: 'center', letterSpacing: 1 },
+  starsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 8, width: 80 },
+  star: { fontSize: 12, color: '#000', margin: 2 },
+  ticketBody: { alignItems: 'center', justifyContent: 'center' },
+  circleDesign: { width: 140, height: 140, borderRadius: 70, backgroundColor: '#FF6B35', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  circleText: { fontSize: 16, fontWeight: '700', color: '#FFF', textAlign: 'center', fontStyle: 'italic' },
+  ticketInfo: { alignItems: 'center' },
+  secretText: { fontSize: 8, fontWeight: '600', color: '#000', textAlign: 'center', marginBottom: 8 },
+  dateText: { fontSize: 8, fontWeight: '500', color: '#000', textAlign: 'center', marginBottom: 8 },
+  timeText: { fontSize: 10, fontWeight: '700', color: '#000', textAlign: 'center' },
 });
 
 export default TicketSuccess;
