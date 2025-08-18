@@ -13,7 +13,10 @@ interface SharingConfirmationProps {
   onComplete?: (isPublic: boolean) => void;
 }
 
-const SharingConfirmation: React.FC<SharingConfirmationProps> = ({ onBack, onComplete }) => {
+const SharingConfirmation: React.FC<SharingConfirmationProps> = ({
+  onBack,
+  onComplete,
+}) => {
   const handlePrivateSelect = () => {
     onComplete?.(false); // false = private
   };
@@ -36,8 +39,12 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({ onBack, onCom
 
         {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.title}>"들리와요 비밀함주실! vol.1"{'\n'}친구들에게 공개할까요?</Text>
-          <Text style={styles.subtitle}>친구들이 내가 쓴 후기를 볼 수 있어요.</Text>
+          <Text style={styles.title}>
+            "들리와요 비밀함주실! vol.1"{'\n'}친구들에게 공개할까요?
+          </Text>
+          <Text style={styles.subtitle}>
+            친구들이 내가 쓴 후기를 볼 수 있어요.
+          </Text>
 
           {/* Ticket Preview */}
           <View style={styles.ticketContainer}>
@@ -47,31 +54,46 @@ const SharingConfirmation: React.FC<SharingConfirmationProps> = ({ onBack, onCom
                 <Text style={styles.ticketTitle}>JAMONG{'\n'}SALGU CLUB</Text>
                 <View style={styles.starsContainer}>
                   {[...Array(8)].map((_, i) => (
-                    <Text key={i} style={styles.star}>★</Text>
+                    <Text key={i} style={styles.star}>
+                      ★
+                    </Text>
                   ))}
                 </View>
               </View>
 
               <View style={styles.ticketBody}>
                 <View style={styles.circleDesign}>
-                  <Text style={styles.circleText}>Jamong{'\n'}Salgu{'\n'}Club</Text>
+                  <Text style={styles.circleText}>
+                    Jamong{'\n'}Salgu{'\n'}Club
+                  </Text>
                 </View>
 
                 <View style={styles.ticketInfo}>
-                  <Text style={styles.secretText}>SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY{'\n'}WANT TO DIE) (PLEASE)</Text>
-                  <Text style={styles.dateText}>IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND COME THE MUSIC ROOM</Text>
+                  <Text style={styles.secretText}>
+                    SECRET CLUB OF THOSE WHO{'\n'}WANT TO DIE (IT'S NOT ACTUALLY
+                    {'\n'}WANT TO DIE) (PLEASE)
+                  </Text>
+                  <Text style={styles.dateText}>
+                    IF YOU JOIN TO OUR, BRING THE TICKET{'\n'}ON THE STAGE AND
+                    COME THE MUSIC ROOM
+                  </Text>
                   <Text style={styles.timeText}>TOMORROW★{'\n'}AT 5PM</Text>
                 </View>
               </View>
             </View>
           </View>
-
           {/* Action Buttons */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.privateButton} onPress={onComplete}>
+            <TouchableOpacity
+              style={styles.privateButton}
+              onPress={handlePrivateSelect}
+            >
               <Text style={styles.privateButtonText}>아니요</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={onComplete}>
+            <TouchableOpacity
+              style={styles.shareButton}
+              onPress={handlePublicSelect}
+            >
               <Text style={styles.shareButtonText}>공개할게요</Text>
             </TouchableOpacity>
           </View>

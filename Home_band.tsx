@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import DetailModal from './Detail';
-import NewTicket from './NewTicket';
+import NewTicket from './NewTicket/NewTicket';
 import Calendar from './Calendar';
 import MyPage from './MyPage';
 

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Calendar from './Calendar';
-import NewTicket from './NewTicket';
+import NewTicket from './NewTicket/NewTicket';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 56 - 16) / 3;

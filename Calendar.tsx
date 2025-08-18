@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import NewTicket from './NewTicket';
+import NewTicket from './NewTicket/NewTicket';
 import MyPage from './MyPage';
 
 interface Event {
