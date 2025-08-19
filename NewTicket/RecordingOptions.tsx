@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,76 +7,92 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import AIImageLoading from './AIImageLoading';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-interface AIImageGenerationProps {
-  onBack?: () => void;
-  onComplete?: () => void;
-}
+type RootStackParamList = {
+  RecordingOptions: undefined;
+  WriteReview: { method: 'record' | 'upload' | 'write' };
+};
 
-const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplete }) => {
-  const [showLoading, setShowLoading] = useState(false);
+type RecordingOptionsScreenProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'RecordingOptions'
+>;
 
-  const handleAIImageSelect = () => {
-    setShowLoading(true);
+const RecordingOptions: React.FC = () => {
+  const navigation = useNavigation<RecordingOptionsScreenProp>();
+
+  const handleSelect = (option: 'record' | 'upload' | 'write') => {
+    navigation.navigate('WriteReview', { method: option });
   };
 
-  if (showLoading) {
-    return (
-      <AIImageLoading 
-        onBack={() => setShowLoading(false)}
-        onComplete={onComplete}
-      />
-    );
-  }
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
-
-        {/* Header Back Button */}
+        {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Title & Subtitle */}
+        {/* Title */}
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>공연후기 작성하기</Text>
+          <Text style={styles.title}>공연 후기 작성하기</Text>
           <Text style={styles.subtitle}>
-            오늘 공연에서 가장 기억에 남는 장면은 무엇인가요?
+            오늘 공연에서 기억에 남는 장면은 무엇인가요?
           </Text>
         </View>
 
+        {/* Options */}
         <View style={styles.content}>
-          {/* AI 생성형 이미지 옵션 */}
+          {/* 음성녹음 */}
           <TouchableOpacity
             style={[styles.optionCard, styles.highlightedCard]}
-            onPress={handleAIImageSelect}
+            onPress={() => handleSelect('record')}
           >
-            <View style={styles.iconContainer}>
-              <View style={styles.iconPlaceholder} />
-            </View>
+            <View style={styles.iconPlaceholder} />
             <View style={styles.textContainer}>
-              <Text style={styles.optionTitle}>AI 생성형 이미지</Text>
+              <Text style={styles.optionTitle}>음성녹음</Text>
               <Text style={styles.optionDescription}>
-                관람한 공연에 맞는 이미지를{'\n'}
-                AI가 생성해드립니다.
+                마이크를 켤 수 있으면 사용하세요.{'\n'}
+                마이크를 켜고 녹음을 해보자
               </Text>
             </View>
           </TouchableOpacity>
 
-          {/* 파일 업로드 옵션 */}
-          <TouchableOpacity style={styles.optionCard}>
-            <View style={styles.iconContainer}>
-              <View style={styles.iconPlaceholder} />
-            </View>
+          {/* 녹음 파일 업로드 */}
+          <TouchableOpacity
+            style={styles.optionCard}
+            onPress={() => handleSelect('upload')}
+          >
+            <View style={styles.iconPlaceholder} />
             <View style={styles.textContainer}>
-              <Text style={styles.optionTitle}>파일 업로드</Text>
+              <Text style={styles.optionTitle}>녹음 파일 업로드</Text>
               <Text style={styles.optionDescription}>
-                사진첩에서 파일을 업로드 하세요.
+                녹음한 파일을 모아 정리하고 싶다면{'\n'}
+                업로드해서 후기를 작성하세요.
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* 직접 작성 */}
+          <TouchableOpacity
+            style={styles.optionCard}
+            onPress={() => handleSelect('write')}
+          >
+            <View style={styles.iconPlaceholder} />
+            <View style={styles.textContainer}>
+              <Text style={styles.optionTitle}>직접 작성</Text>
+              <Text style={styles.optionDescription}>
+                마이크도 없고 녹음도 없다면{'\n'}
+                키보드로 직접 작성하세요.
               </Text>
             </View>
           </TouchableOpacity>
@@ -87,7 +103,7 @@ const AIImageGeneration: React.FC<AIImageGenerationProps> = ({ onBack, onComplet
 };
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#F2F2F7',
   },
@@ -99,26 +115,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 0,
   },
   backButton: {
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 8,
   },
   backIcon: {
     fontSize: 24,
-    fontWeight: '400',
     color: '#000',
   },
-
-  // Title & Subtitle NewTicket 스타일 동일 적용
   titleContainer: {
     alignItems: 'center',
+    marginVertical: 20,
     paddingHorizontal: 16,
-    marginBottom: 20,
   },
   title: {
     fontSize: 28,
@@ -133,55 +144,46 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     textAlign: 'center',
   },
-
   content: {
     flex: 1,
     paddingHorizontal: 28,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   optionCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     backgroundColor: '#FFF',
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
     shadowColor: '#000',
+    shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowRadius: 8,
+    elevation: 2,
   },
   highlightedCard: {
-    backgroundColor: '#FFE5E5',
-    borderWidth: 1,
-    borderColor: '#FF3B30',
-  },
-  iconContainer: {
-    marginRight: 16,
-    marginTop: 4,
+    backgroundColor: '#E85C5C',
   },
   iconPlaceholder: {
     width: 40,
     height: 40,
-    backgroundColor: '#E5E5EA',
     borderRadius: 8,
+    backgroundColor: '#E5E5EA',
+    marginRight: 16,
   },
-  textContainer: {
-    flex: 1,
-  },
+  textContainer: { flex: 1 },
   optionTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: '#000',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   optionDescription: {
     fontSize: 12,
-    fontWeight: '400',
-    color: '#666',
+    color: '#444',
     lineHeight: 16,
   },
 });
 
-export default AIImageGeneration;
+export default RecordingOptions;
