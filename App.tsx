@@ -1,42 +1,72 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home_band from './Home_band';
-import Detail from './Detail';
-import RecordingOptions from './NewTicket/RecordingOptions';
-import WriteReview from './NewTicket/WriteReview';
-import AIImageGeneration from './NewTicket/AIImageGeneration'; // 추가
-import { enableScreens } from 'react-native-screens';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Detail from './src/pages/Detail';
 
 export type RootStackParamList = {
   Home: undefined;
-  Details: { ticketId: number };
-  RecordingOptions: undefined;
-  WriteReview: undefined;
-  AIImageGeneration: { review: string };
+  Details: { ticketId?: string };
 };
 
-enableScreens();
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function HomeScreen({ navigation }: any) {
+  console.log('App component rendered');
+  
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Hello World!</Text>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('Details', { ticketId: '123' })}
+      >
+        <Text style={styles.buttonText}>Go to Details</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={Home_band} />
-        <Stack.Screen
-          name="Details"
-          component={Detail}
-          options={{
-            presentation: 'modal',
-            animation: 'slide_from_bottom',
-            headerShown: false,
-          }}
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{ headerShown: false }}
         />
-        <Stack.Screen name="RecordingOptions" component={RecordingOptions} />
-        <Stack.Screen name="WriteReview" component={WriteReview} />
-        <Stack.Screen name="AIImageGeneration" component={AIImageGeneration} />
+        <Stack.Screen 
+          name="Details" 
+          component={Detail} 
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2F2F7',
+  },
+  text: {
+    fontSize: 20,
+    color: '#333',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

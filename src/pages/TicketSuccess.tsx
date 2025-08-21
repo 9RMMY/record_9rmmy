@@ -12,6 +12,7 @@ import {
 interface TicketSuccessProps {
   onBack?: () => void;
   onNext?: () => void;
+  onRestart?: () => void;
 }
 
 const TicketSuccess: React.FC<TicketSuccessProps> = ({ onBack, onNext }) => {

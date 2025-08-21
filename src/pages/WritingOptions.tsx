@@ -20,15 +20,14 @@ type RecordingOptionsScreenProp = NativeStackNavigationProp<
   'RecordingOptions'
 >;
 
-const RecordingOptions: React.FC = () => {
-  const navigation = useNavigation<RecordingOptionsScreenProp>();
+interface WritingOptionsProps {
+  onBack?: () => void;
+  onNext?: () => void;
+}
 
+const WritingOptions: React.FC<WritingOptionsProps> = ({ onBack, onNext }) => {
   const handleSelect = (option: 'record' | 'upload' | 'write') => {
-    navigation.navigate('WriteReview', { method: option });
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
+    onNext?.();
   };
 
   return (
@@ -37,7 +36,7 @@ const RecordingOptions: React.FC = () => {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+          <TouchableOpacity onPress={onBack} style={styles.backButton}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
         </View>
@@ -186,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecordingOptions;
+export default WritingOptions;

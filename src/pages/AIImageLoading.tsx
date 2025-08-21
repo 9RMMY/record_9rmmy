@@ -1,3 +1,4 @@
+// AIImageLoading.tsx
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -17,7 +18,10 @@ interface AIImageLoadingProps {
   onComplete?: () => void;
 }
 
-const AIImageLoading: React.FC<AIImageLoadingProps> = ({ onBack, onComplete }) => {
+const AIImageLoading: React.FC<AIImageLoadingProps> = ({
+  onBack = () => {},
+  onComplete = () => {},
+}) => {
   const [progress, setProgress] = useState(0);
   const [currentScreen, setCurrentScreen] = useState<'loading' | 'completion' | 'success' | 'sharing'>('loading');
   const [reloadKey, setReloadKey] = useState(0); // 로딩 초기화용
@@ -44,12 +48,10 @@ const AIImageLoading: React.FC<AIImageLoadingProps> = ({ onBack, onComplete }) =
   // 화면 이동 핸들러
   const handleCompletionNext = () => setCurrentScreen('success');
   const handleSuccessNext = () => setCurrentScreen('sharing');
-
   const handleRestart = () => {
     setCurrentScreen('loading');
-    setReloadKey(prev => prev + 1); // 로딩 다시 시작
+    setReloadKey(prev => prev + 1);
   };
-
   const handleBackToCompletion = () => setCurrentScreen('completion');
   const handleBackToSuccess = () => setCurrentScreen('success');
 
@@ -57,11 +59,9 @@ const AIImageLoading: React.FC<AIImageLoadingProps> = ({ onBack, onComplete }) =
   if (currentScreen === 'completion') {
     return <TicketCompletion onBack={handleRestart} onNext={handleCompletionNext} />;
   }
-
   if (currentScreen === 'success') {
     return <TicketSuccess onBack={handleBackToCompletion} onNext={handleSuccessNext} onRestart={handleRestart} />;
   }
-
   if (currentScreen === 'sharing') {
     return <SharingConfirmation onBack={handleBackToSuccess} onComplete={onComplete} />;
   }
@@ -97,10 +97,12 @@ const AIImageLoading: React.FC<AIImageLoadingProps> = ({ onBack, onComplete }) =
         {/* Complete Button */}
         <View style={styles.bottomContainer}>
           <TouchableOpacity
-            style={styles.completeButton}
             disabled={progress < 100}
             onPress={() => setCurrentScreen('completion')}
           >
+            <Text style={[styles.completeButtonText, progress < 100 && styles.disabledText]}>
+              완료
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -111,7 +113,7 @@ const AIImageLoading: React.FC<AIImageLoadingProps> = ({ onBack, onComplete }) =
 const styles = StyleSheet.create({
   safeAreaContainer: { flex: 1, backgroundColor: '#F2F2F7' },
   container: { flex: 1, backgroundColor: '#F2F2F7' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 },
+  header: { flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 24 },
   backButton: { width: 44, height: 44, justifyContent: 'center', alignItems: 'center', marginTop: 8 },
   backIcon: { fontSize: 24, fontWeight: '400', color: '#000' },
   content: { flex: 1, paddingHorizontal: 28, paddingTop: 20 },
@@ -123,6 +125,7 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', backgroundColor: '#FF3B30', borderRadius: 4 },
   progressText: { fontSize: 14, fontWeight: '600', color: '#666' },
   bottomContainer: { paddingHorizontal: 28, paddingBottom: 40 },
+  completeButtonText: { fontSize: 16, fontWeight: '700', color: '#FF3B30', textAlign: 'center' },
   disabledText: { opacity: 0.5 },
 });
 

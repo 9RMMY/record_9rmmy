@@ -3,5 +3,5 @@
     "include": [
     "src",
     "styled-components-native.d.ts"
-  ]
+, "App.tsx"  ]
 }
